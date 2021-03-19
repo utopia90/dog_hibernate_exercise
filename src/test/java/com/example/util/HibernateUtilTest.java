@@ -1,15 +1,12 @@
 package com.example.util;
 
-import com.example.util.model.Employee;
+import com.example.util.model.Dog;
 import com.example.util.util.HibernateUtil;
 import org.hibernate.Session;
-import org.hibernate.Transaction;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import javax.persistence.Query;
-import java.time.Instant;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -19,54 +16,53 @@ class HibernateUtilTest {
      @DisplayName("queryAll")
     public void queryAll(){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        List<Employee> employees = session.createQuery("from Employee", Employee.class).list();
-        assertEquals(1, employees.size());
-        employees.forEach(e -> assertNotNull(e.getName()));
+        List<Dog> dogs = session.createQuery("from Dog", Dog.class).list();
+        assertEquals(1, dogs.size());
+        dogs.forEach(e -> assertNotNull(e.getName()));
         session.close();
     }
     @Test
-    @DisplayName("Recuperar empleado por ID")
-    public void recuperarEmpleadoPorId(){
+    @DisplayName("Recuperar perro por ID")
+    public void recuperarPerroPorId(){
 
         //Option1
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Employee employee = session.find(Employee.class, 1L);
+        Dog dog = session.find(Dog.class, 1L);
 
-        assertNotNull(employee);
-        assertEquals(1L, employee.getId());
+        assertEquals("Laika", dog.getName());
 
         session.close();
     }
     @Test
-    @DisplayName("Recuperar empleado por ID")
+    @DisplayName("Recuperar perro por ID")
     public void recuperarUnoPorParametro(){
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        String hql = "from Employee where id = :idEmpleado";
+        String hql = "from Dog where id = :idPerro";
         Query query = session.createQuery(hql);
-        query.setParameter("idEmpleado", 1L);
-        Employee employee = (Employee) query.getSingleResult();
-        assertNotNull(employee);
-        assertEquals(1L, employee.getId());
+        query.setParameter("idPerro", 1L);
+        Dog dog = (Dog) query.getSingleResult();
+        assertNotNull(dog);
+        assertEquals(1L, dog.getId());
 
         session.close();
 }
 
 
     @Test
-    @DisplayName("create one employee")
-    public void createOneEmployee(){
+    @DisplayName("create one dog")
+    public void createOneDog(){
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Employee employee1 = new Employee("Juan", 25, true, 3000.0D);
+        Dog dog1 = new Dog("pepi", "sara", "quick dog", true,22);
 
         session.beginTransaction();
 
-        session.save(employee1);
+        session.save(dog1);
 
         session.getTransaction().commit();
 
-        System.out.println(employee1);
+        System.out.println(dog1);
 
         session.close();
     }
@@ -74,34 +70,35 @@ class HibernateUtilTest {
     @DisplayName("Update One")
     public void updateOne(){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Employee employeeDB = session.find(Employee.class, 1L);
+        Dog dogDB = session.find(Dog.class, 1L);
 
         session.beginTransaction();
 
 
-        session.save(employeeDB);
+        session.save(dogDB);
 
         session.getTransaction().commit();
+
+        dogDB.setName(dogDB.getName() + " editado");
+
         session.close();
-        employeeDB.setName(employeeDB.getName() + " editado");
 
-
-        System.out.println(employeeDB);
+        System.out.println(dogDB);
 
     }
     @Test
     @DisplayName("Delete one")
     public void deleteOne(){
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Employee employeeDB = session.find(Employee.class, 1L);
+        Dog dogDB = session.find(Dog.class, 1L);
 
         session.beginTransaction();
-        session.delete(employeeDB);
-        System.out.println(employeeDB);
-        session.persist(employeeDB);
+        session.delete(dogDB);
+        System.out.println(dogDB);
+        session.persist(dogDB);
         session.getTransaction().commit();
 
-        System.out.println(employeeDB);
+        System.out.println(dogDB);
 
         session.close();
     }

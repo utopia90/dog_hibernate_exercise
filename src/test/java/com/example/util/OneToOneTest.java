@@ -1,8 +1,7 @@
 package com.example.util;
 
-import com.example.util.model.Direction;
-import com.example.util.model.Employee;
-import com.example.util.model.Qualifications;
+import com.example.util.model.Dog;
+import com.example.util.model.Veterinarian;
 import com.example.util.util.HibernateUtil;
 import org.hibernate.Session;
 import org.junit.jupiter.api.DisplayName;
@@ -14,34 +13,34 @@ public class OneToOneTest {
     @DisplayName("One to One 1")
     public void oneToOne() {
         Session session = HibernateUtil.getSessionFactory().openSession();
-        Employee employee = new Employee("Anthony", 22, true, 2000.00);
-        Direction direction = new Direction("calle falsa", "Madrid", "2003", "spain");
+        Dog dog = new Dog("lulu","sara","amazing dog", true, 12);
+        Veterinarian veterinarian = new Veterinarian("Maria", "Madrid", true);
 
         session.beginTransaction();
 
-        session.save(direction);
-        employee.setDirection(direction);
-        session.save(employee);
+        session.save(veterinarian);
+        dog.setVeterinarian(veterinarian);
+        session.save(dog);
         session.getTransaction().commit();
 
-        System.out.println(direction);
-        System.out.println(employee);
+        System.out.println(dog);
+        System.out.println(veterinarian);
     }
     @Test
-    @DisplayName("createDirection")
-    public void createDirection() {
+    @DisplayName("createVeterinarian")
+    public void createVeterinarian() {
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Employee employee = new Employee("Marcos", 22, true, 2000.40);
-        Direction direction = new Direction("calle nueva", "Malaga", "2003", "spain");
+        Dog dog = new Dog("pololo","sara","pretty dog", true, 12);
+        Veterinarian veterinarian = new Veterinarian("Lola", "Barcelona", true);
 
 
         session.beginTransaction();
-        direction.setEmployee(employee);
-        employee.setDirection(direction);
+        veterinarian.setDog(dog);
+        dog.setVeterinarian(veterinarian);
 
-        session.save(direction);
-        session.save(employee);
+        session.save(veterinarian);
+        session.save(dog);
 
         session.getTransaction().commit();
 
@@ -49,57 +48,12 @@ public class OneToOneTest {
 
         session = HibernateUtil.getSessionFactory().openSession();
 
-        Direction directionDB = session.find(Direction.class, direction.getId());
+        Veterinarian veterinarianDB = session.find(Veterinarian.class, veterinarian.getId());
 
-        System.out.println(directionDB.getEmployee());
-
-        session.close();
-
-    }
-    @Test
-    @DisplayName("One to One 1 Qualifications")
-    public void oneToOneQualifications() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        Employee employee = new Employee("Richard", 22, true, 2000.00);
-        Qualifications qualifications = new Qualifications("economics", "economy in the modern company", "english");
-
-        session.beginTransaction();
-
-        session.save(qualifications);
-        employee.setQualifications(qualifications);
-        session.save(employee);
-        session.getTransaction().commit();
-
-        System.out.println(qualifications);
-        System.out.println(employee);
-    }
-    @Test
-    @DisplayName("createQualification")
-    public void createQualification() {
-        Session session = HibernateUtil.getSessionFactory().openSession();
-
-        Employee employee = new Employee("Rigoberto", 22, true, 2000.40);
-        Qualifications qualifications = new Qualifications("art degree", "history of art", "french");
-
-
-        session.beginTransaction();
-        qualifications.setEmployee(employee);
-        employee.setQualifications(qualifications);
-
-        session.save(qualifications);
-        session.save(employee);
-
-        session.getTransaction().commit();
-
-        session.close();
-
-        session = HibernateUtil.getSessionFactory().openSession();
-
-        Qualifications qualificationsDB = session.find(Qualifications.class, qualifications.getId());
-
-        System.out.println(qualificationsDB.getEmployee());
+        System.out.println(veterinarianDB.getDog());
 
         session.close();
 
     }
+
 }

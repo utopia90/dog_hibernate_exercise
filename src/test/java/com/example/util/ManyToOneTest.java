@@ -1,29 +1,34 @@
 package com.example.util;
 
-import com.example.util.model.Company;
-import com.example.util.model.Employee;
+import com.example.util.model.Bone;
+import com.example.util.model.Dog;
 import com.example.util.util.HibernateUtil;
 import org.hibernate.Session;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.Entity;
-
 public class ManyToOneTest {
 
     @Test
-    @DisplayName("Create one company unidirectional")
-    public void createOneCompany(){
+    @DisplayName("Create Bone Unidirectional")
+    public void createBoneUnidirectional() {
+
         Session session = HibernateUtil.getSessionFactory().openSession();
 
-        Company company = new Company("Imagina", "8080808D");
-        Employee employee = new Employee("empleado1", 34,true,3000.00);
+        Bone bone = new Bone( "bone material", true);
+        Dog dog = new Dog("lulita", "sara", "little dog",true,22 );
+        Dog dog2 = new Dog("pepita", "sara", "sleepy dog",true,22 );
 
         session.beginTransaction();
 
-        employee.setCompany(company);
-        //sin guardar company primero ocurre: transientobjectexception
-        session.save(employee);
+        // Persistir
+        dog.setBone(bone);
+        dog2.setBone(bone);
+
+        session.persist(dog); // crear
+        session.persist(dog2);
+
+
         session.getTransaction().commit();
     }
 }

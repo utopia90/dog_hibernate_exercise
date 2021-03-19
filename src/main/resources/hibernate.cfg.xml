@@ -21,10 +21,13 @@
         <property name="hbm2ddl.auto">create</property>
         <property name="hibernate.hbm2ddl.import_files">data.sql</property>
 
-        <mapping class="com.example.util.model.Qualifications" />
-        <mapping class="com.example.util.model.Direction" />
-        <mapping class="com.example.util.model.Employee" />
-        <mapping class="com.example.util.model.Company" />
+        <mapping class="com.example.util.model.DogWalker" />
+        <mapping class="com.example.util.model.Dog" />
+        <mapping class="com.example.util.model.Veterinarian" />
+        <mapping class="com.example.util.model.Bone" />
+        <mapping class="com.example.util.model.DogShampoo" />
+
+
 
     </session-factory>
 </hibernate-configuration>
